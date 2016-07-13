@@ -10,9 +10,24 @@ import ua.com.juja.sqlcmd.view.View;
  * Created by asu06 on 13.07.16.
  */
 public class MainController {
+
+    private View view;
+    private DatabaseManager manager;
+
+    public MainController(View view, DatabaseManager manager) {
+        this.view = view;
+        this.manager = manager;
+    }
+
     public static void main(String[] args) {
-        View view = new Console();
-        DatabaseManager manager = new JDBCDatabaseManager();
+
+    }
+
+    public void  run(){
+        connectToDb();
+    }
+
+    private void connectToDb() {
         view.write("Hi, user!!!");
         while (true) {
             view.write("Enter please: databasename|user|password");
