@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.controller.command;
 
+import com.sun.javaws.exceptions.ExitException;
 import ua.com.juja.sqlcmd.view.View;
 
 /**
@@ -20,7 +21,7 @@ public class Exit implements Command {
     @Override
     public void process(String command) {
         view.write("Bye ! ! !");
-        System.exit(0);
+        throw new Exitexeption();
 
     }
 }
