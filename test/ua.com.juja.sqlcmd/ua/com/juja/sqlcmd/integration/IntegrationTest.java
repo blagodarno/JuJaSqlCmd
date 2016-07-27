@@ -48,6 +48,10 @@ public class IntegrationTest {
                 "\t\tдля подключения к базе данных\n" +
                 "\tlist\n" +
                 "\t\tдля получения списка всех таблиц базы, к которой подключились\n" +
+                "\tclear|tableName\n" +
+                "\t\tдля очистки всей таблицы\n" +
+                "\tcreate|tableName|column1|value1|value2|....|columnN|valueN \n" +
+                "\t\tдля создания записи в таблице\n" +
                 "\tfind|tableName\n" +
                 "\t\tдля получения содержимого таблицы 'tableName'\n" +
                 "\thelp\n" +
@@ -191,9 +195,62 @@ public class IntegrationTest {
                 "--------------------\n" +
                 "|id|name|surname|login|password|email|\n" +
                 "--------------------\n" +
+                "|13|Ban|Pogankin|pogan|pass111|ban@aol.com|\n" +
+                "|1|John|Harry|j_harry|fgd111|j_harry@aol.com|\n" +
                 "Enter command or help:\n" +
                 "Bye ! ! !\n", getData());
     }
 
+    @Test
+    public void testConnectWithError(){
+        //given
+        in.add("connect|article");
+        in.add("exit");
 
+        // when
+        Main.main(new String [0]);
+
+        //then
+        assertEquals("Привет юзер!\n" +
+                "Введи, пожалуйста имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password\n" +
+                "Неудача! по причине: Неверно количество параметров разделенных знаком '|', ожидается '4', но есть 2: \n" +
+                "Повтори попытку.\n" +
+                "Enter command or help:\n" +
+                "Bye ! ! !\n", getData());
+    }
+
+    @Test
+    public void testFindExistAfterConnectWithData(){
+        //given
+        in.add("connect|article|postgres|postgres");
+        in.add("clear|users");
+       in.add("create|users|id|13|name|Ban|surname|Pogankin|login|pogan|password|pass111|email|ban@aol.com");
+       in.add("create|users|id|1|name|John|surname|Harry|login|j_harry|password|fgd111|email|j_harry@aol.com"); //|id|name|surname|login|password|email|
+        //in.add("create|users|13|1");
+//        in.add("create|users|1|15");
+        in.add("find|users");
+        in.add("exit");
+
+        // when
+        Main.main(new String [0]);
+
+        //then
+        assertEquals("Привет юзер!\n" +
+                "Введи, пожалуйста имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password\n" +
+                "Успех!\n" +
+                "Enter command or help:\n" +
+                "Таблица users была очищена.\n" +
+                "Enter command or help:\n" +
+                "Запсиь {names:[id, name, surname, login, password, email], values:[13, Ban, Pogankin, pogan, pass111, ban@aol.com]} была успешно создана в таблице 'users'\n" +
+                "Enter command or help:\n" +
+                "Запсиь {names:[id, name, surname, login, password, email], values:[1, John, Harry, j_harry, fgd111, j_harry@aol.com]} была успешно создана в таблице 'users'\n" +
+                "Enter command or help:\n" +
+                "--------------------\n" +
+                "|id|name|surname|login|password|email|\n" +
+                "--------------------\n" +
+                "|13|Ban|Pogankin|pogan|pass111|ban@aol.com|\n" +
+                "|1|John|Harry|j_harry|fgd111|j_harry@aol.com|\n" +
+                "Enter command or help:\n" +
+                "Bye ! ! !\n", getData());
+    }
 }
