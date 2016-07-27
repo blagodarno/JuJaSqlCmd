@@ -24,7 +24,6 @@ public class Connect implements Command {
     @Override
     public void process(String command) {
 
-                try {
                     String[] data = command.split("\\|");
                     if (data.length != parametersLength()) {
                         throw new IllegalArgumentException(
@@ -38,24 +37,11 @@ public class Connect implements Command {
 
                     manager.connect(databaseName, userName, password);
                     view.write("Успех!");
-                } catch (Exception e) {
-                    printError(e);
-                }
         }
 
     private int parametersLength() {
         return COMMAND_SAMPLE.split("\\|").length;
     }
-
-    private void printError(Exception e) {
-            String message =  e.getMessage();
-            Throwable cause = e.getCause();
-            if (cause != null) {
-                message += " " + cause.getMessage();
-            }
-            view.write("Неудача! по причине: " + message);
-            view.write("Повтори попытку.");
-        }
 
     }
 

@@ -27,7 +27,7 @@ public class Create implements Command {
     public void process(String command) {
         String [] data = command.split("\\|");
         if (data.length % 2 != 0) {
-            throw new IllegalArgumentException("Должно быть чётное кол-во параметров в формате: create|tableName|column1|value1|value2|....|columnN|valueN в не " + command);
+            throw new IllegalArgumentException(String.format("Должно быть чётное кол-во параметров в формате: create|tableName|column1|value1|value2|....|columnN|valueN в не '%s'",command));
         }
         String tableName = data [1];
         DataSet dataSet = new DataSet();

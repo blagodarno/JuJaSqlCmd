@@ -37,24 +37,43 @@ public class MainController {
         try {
             doWork();
         }catch (Exitexeption e){
-            //do nothing
+            // do nothing;
         }
         }
 
     private void doWork() {
         while (true) {
             String input = view.read();
-            if (input == null) { //null catcher if close application
-                new Exit(view).process(input);
-            }
+//            if (input == null) { //null catcher if close application
+//                new Exit(view).process(input);
+//                break;
+//            }
             for (Command command : commands) {
+                try {
                 if (command.canProcess(input)) {
                     command.process(input);
                     break;
                 }
-            }
+                    }catch (Exception e){
+                      if (e instanceof Exitexeption) {
+                          throw e;
+                      }
+                    printError(e);
+                    break;
+                    }
+                }
             view.write("Enter command or help:");
         }
+    }
+
+    private void printError(Exception e) {
+        String message =  e.getMessage();
+        Throwable cause = e.getCause();
+        if (cause != null) {
+            message += " " + cause.getMessage();
+        }
+        view.write("Неудача! по причине: " + message);
+        view.write("Повтори попытку.");
     }
 
 }

@@ -226,8 +226,6 @@ public class IntegrationTest {
         in.add("clear|users");
        in.add("create|users|id|13|name|Ban|surname|Pogankin|login|pogan|password|pass111|email|ban@aol.com");
        in.add("create|users|id|1|name|John|surname|Harry|login|j_harry|password|fgd111|email|j_harry@aol.com"); //|id|name|surname|login|password|email|
-        //in.add("create|users|13|1");
-//        in.add("create|users|1|15");
         in.add("find|users");
         in.add("exit");
 
@@ -253,4 +251,49 @@ public class IntegrationTest {
                 "Enter command or help:\n" +
                 "Bye ! ! !\n", getData());
     }
+
+
+    @Test
+    public void testClearWithError(){
+
+        //given
+        in.add("connect|article|postgres|postgres");
+        in.add("clear");
+        in.add("exit");
+
+        // when
+        Main.main(new String [0]);
+
+        //then
+        assertEquals("Привет юзер!\n" +
+                "Введи, пожалуйста имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password\n" +
+                "Успех!\n" +
+                "Enter command or help:\n" +
+                "Illegal command : clear\n" +
+                "Enter command or help:\n" +
+                "Bye ! ! !\n", getData());
+
+    }
+    @Test
+    public void testCreateWithErrors(){
+        //given
+        in.add("connect|article|postgres|postgres");
+        in.add("clear|users|error");
+        in.add("exit");
+
+        // when
+        Main.main(new String [0]);
+
+        //then
+        assertEquals("Привет юзер!\n" +
+                "Введи, пожалуйста имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password\n" +
+                "Успех!\n" +
+                "Enter command or help:\n" +
+                "Неудача! по причине: Формат команды 'clear|tableName', а не clear|users|error\n" +
+                "Повтори попытку.\n" +
+                "Enter command or help:\n" +
+                "Bye ! ! !\n", getData());
+    }
+
+
 }
